@@ -54,5 +54,5 @@ for t,v in database.items():
 database = {k:v for k,v in database.items() if v!=set([])}
 drugL = [k for k,v in database.items()]
 
-#print(drugL)
+print(drugL)
 #print(len(drugL))

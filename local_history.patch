@@ -1,0 +1,80 @@
+Index: EnzymeAffected.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- EnzymeAffected.py	(revision )
++++ EnzymeAffected.py	(revision )
+@@ -5,8 +5,8 @@
+ import xml.etree.cElementTree as ET
+ import re
+ import itertools
+-import _json
+-
++import csv
++import _pickle as cpickle
+ 
+ path = r'C:\Users\Balaji\Desktop\Drug.xml'
+ 
+@@ -19,30 +19,52 @@
+ 
+ ns = {'webs':'http://www.drugbank.ca'}
+ 
+-
++count=0
+ database ={}
+ 
+ for elem in tree.findall('./{http://www.drugbank.ca}drug'):
+     name = elem.find('./{http://www.drugbank.ca}name')
+     inhibitors=[]
+-    for elem2 in elem.findall('./{http://www.drugbank.ca}targets/{http://www.drugbank.ca}target/{http://www.drugbank.ca}actions/{http://www.drugbank.ca}action'):
++    organism = elem.find('./{http://www.drugbank.ca}enzymes/{http://www.drugbank.ca}enzyme/{http://www.drugbank.ca}organism')
++    for elem2 in elem.findall('./{http://www.drugbank.ca}enzymes/{http://www.drugbank.ca}enzyme'):
+         #print(elem2.text)
+-        if elem2.text is 'inhibitor' or 'inhibitory allosteric modulator' or 'inhibitor, competitive':
++        if elem2.text is 'inhibitor' or 'inhibitory allosteric modulator' or 'inhibitor, competitive' and organism.text is 'Human':
+             #print('aya')
+-            gene = elem.find('./{http://www.drugbank.ca}targets/{http://www.drugbank.ca}target/{http://www.drugbank.ca}name')
++            gene = elem.find('./{http://www.drugbank.ca}enzymes/{http://www.drugbank.ca}enzyme/{http://www.drugbank.ca}name')
+             inhibitors.append(gene.text)
++    print(inhibitors)
+     database[name.text]=inhibitors
+ 
+ 
+-print(database)
++#print(database)
+ 
++#with open('file.txt', 'w') as file:
++ #    file.write(json.dumps(database))
+ 
++database = {k:v for k,v in database.items() if v!=[]}
+ 
++#print(len(database))
+ 
++#print(database)
+ 
+-
+-
+-
++ #text = cpickle.dumps(database)
+     #result = re.sub(r"{http\S+\.ca}", "",str(elem)
+ 
++print(len(database))
++
++reactions = []
++with open('reactions.csv','rt') as f:
++    reader=csv.reader(f)
++    for row in reader:
++        reactions.append(row[4])
++
++
++for t,v in database.items():
++
++    l = [t1 for t1 in v for g in reactions if g.lower().find(t1.lower())!=-1]
++    database.update({t:set(l)})
++
++#print(database)
++database = {k:v for k,v in database.items() if v!=set([])}
+ 
++#print(len(database))
+\ No newline at end of file

@@ -11,7 +11,7 @@ with open('genes .csv','rt') as f:
 #print(reactions)
 
 
-d = {'kappa':['APPA'],'dss':['ghhf12','AOC2'],'asas':['CUBN','AOC1']}
+d = {'kappa':['APPA'],'dss':['ghhf12','AOC3'],'asas':['CUBN','AOC1']}
 #d2={}
 #l=[]
 
